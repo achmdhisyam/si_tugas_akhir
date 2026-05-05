@@ -20,6 +20,13 @@ class Skripsi extends Model
         'progress',
         'dosen_id',
         'dosen_id_2',
+        'file_draft_final',
+        'file_revisi',
+        'status_revisi',
+        'acc_pembimbing_1',
+        'acc_pembimbing_2',
+        'acc_penguji_1',
+        'acc_penguji_2',
     ];
 
     /**

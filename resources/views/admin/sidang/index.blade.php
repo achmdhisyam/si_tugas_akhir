@@ -3,7 +3,7 @@
         Manajemen Penjadwalan Sidang
     </x-slot>
 
-    <div class="max-w-7xl mx-auto space-y-6">
+    <div class="max-w-7xl mx-auto space-y-6" x-data="{ openDetail: false, detailData: {} }">
         @if (session('success'))
             <div class="p-4 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg shadow-sm">
                 {{ session('success') }}
@@ -72,8 +72,14 @@
 
                                                 <div class="mb-3">
                                                     <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wide mb-1">Ruangan Sidang</label>
-                                                    <input type="text" name="ruangan" required value="{{ $jadwal->ruangan }}" placeholder="Contoh: R. Rapat 1"
-                                                           class="w-full text-xs border-gray-300 rounded shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                                    <select name="ruangan" required class="w-full text-xs border-gray-300 rounded shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                                        <option value="">-- Pilih Ruangan --</option>
+                                                        @foreach($ruangans as $ruang)
+                                                            <option value="{{ $ruang->nama_ruangan }}" {{ $jadwal->ruangan == $ruang->nama_ruangan ? 'selected' : '' }}>
+                                                                {{ $ruang->nama_ruangan }} {{ $ruang->kapasitas ? '('.$ruang->kapasitas.' org)' : '' }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
 
                                                 <div class="mb-3">
@@ -102,7 +108,20 @@
                                             </form>
                                         </div>
                                     @else
-                                        <a href="#" class="text-indigo-600 text-xs font-medium hover:underline">Lihat Detail Nilai</a>
+                                        <button @click="openDetail = true; detailData = {{ json_encode([
+                                            'mahasiswa' => $jadwal->skripsi->mahasiswa->name,
+                                            'judul' => $jadwal->skripsi->judul,
+                                            'nilai' => $jadwal->nilai,
+                                            'status' => $jadwal->status_kelulusan,
+                                            'penguji1' => $jadwal->penguji1->name ?? '-',
+                                            'penguji2' => $jadwal->penguji2->name ?? '-',
+                                            'acc_p1' => $jadwal->skripsi->acc_pembimbing_1,
+                                            'acc_p2' => $jadwal->skripsi->acc_pembimbing_2,
+                                            'acc_u1' => $jadwal->skripsi->acc_penguji_1,
+                                            'acc_u2' => $jadwal->skripsi->acc_penguji_2,
+                                        ]) }}" class="text-indigo-600 text-xs font-bold hover:underline">
+                                            Lihat Detail Nilai
+                                        </button>
                                     @endif
                                 </td>
                             </tr>
@@ -119,6 +138,77 @@
                     <p class="text-sm text-gray-500">Belum ada mahasiswa yang mendaftar sidang.</p>
                 </div>
             @endif
+        </div>
+
+        <!-- MODAL DETAIL NILAI -->
+        <div x-show="openDetail" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
+            <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+                <div x-show="openDetail" @click="openDetail = false" class="fixed inset-0 transition-opacity" aria-hidden="true">
+                    <div class="absolute inset-0 bg-gray-900 opacity-75"></div>
+                </div>
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                <div x-show="openDetail" class="inline-block align-middle bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                    <div class="bg-indigo-900 px-6 py-4 flex justify-between items-center">
+                        <h3 class="text-lg font-bold text-white">Detail Hasil Sidang</h3>
+                        <button @click="openDetail = false" class="text-indigo-200 hover:text-white">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <div class="mb-6">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Mahasiswa</p>
+                            <h4 class="text-lg font-bold text-gray-900" x-text="detailData.mahasiswa"></h4>
+                            <p class="text-sm text-gray-600 mt-1 italic" x-text="detailData.judul"></p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100">
+                                <p class="text-[10px] font-bold text-indigo-400 uppercase mb-1">Nilai Akhir</p>
+                                <p class="text-3xl font-black text-indigo-900" x-text="detailData.nilai || '-'"></p>
+                            </div>
+                            <div class="p-4 rounded-xl border" :class="detailData.status === 'lulus' ? 'bg-emerald-50 border-emerald-100' : 'bg-amber-50 border-amber-100'">
+                                <p class="text-[10px] font-bold uppercase mb-1" :class="detailData.status === 'lulus' ? 'text-emerald-400' : 'text-amber-400'">Keputusan</p>
+                                <p class="text-sm font-bold" :class="detailData.status === 'lulus' ? 'text-emerald-700' : 'text-amber-700'" x-text="detailData.status ? detailData.status.toUpperCase() : '-'"></p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Status Persetujuan Revisi (ACC)</p>
+                            <div class="grid grid-cols-2 gap-2">
+                                <template x-if="true">
+                                    <div class="flex items-center gap-2 p-2 rounded-lg border border-gray-100 text-xs">
+                                        <div class="w-2 h-2 rounded-full" :class="detailData.acc_p1 ? 'bg-emerald-500' : 'bg-gray-300'"></div>
+                                        <span class="text-gray-700">Pembimbing 1</span>
+                                    </div>
+                                </template>
+                                <template x-if="true">
+                                    <div class="flex items-center gap-2 p-2 rounded-lg border border-gray-100 text-xs">
+                                        <div class="w-2 h-2 rounded-full" :class="detailData.acc_p2 ? 'bg-emerald-500' : 'bg-gray-300'"></div>
+                                        <span class="text-gray-700">Pembimbing 2</span>
+                                    </div>
+                                </template>
+                                <template x-if="true">
+                                    <div class="flex items-center gap-2 p-2 rounded-lg border border-gray-100 text-xs">
+                                        <div class="w-2 h-2 rounded-full" :class="detailData.acc_u1 ? 'bg-emerald-500' : 'bg-gray-300'"></div>
+                                        <span class="text-gray-700">Penguji 1 (Ketua)</span>
+                                    </div>
+                                </template>
+                                <template x-if="true">
+                                    <div class="flex items-center gap-2 p-2 rounded-lg border border-gray-100 text-xs">
+                                        <div class="w-2 h-2 rounded-full" :class="detailData.acc_u2 ? 'bg-emerald-500' : 'bg-gray-300'"></div>
+                                        <span class="text-gray-700">Penguji 2</span>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-6 py-4 flex justify-end">
+                        <button @click="openDetail = false" class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg text-sm font-bold hover:bg-gray-50 transition-colors">
+                            Tutup
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </x-app-layout>

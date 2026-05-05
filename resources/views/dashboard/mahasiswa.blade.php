@@ -95,14 +95,52 @@
                                 Lihat Info Sidang
                             </a>
                         @else
-                            <form action="{{ route('mahasiswa.sidang.daftar') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin mendaftar sidang? Pastikan semua revisi telah diselesaikan.');">
+                            <form id="formDaftarSidang" action="{{ route('mahasiswa.sidang.daftar') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
                                 @csrf
                                 <input type="hidden" name="skripsi_id" value="{{ $skripsi->id }}">
-                                <button type="submit" class="w-full inline-flex justify-center items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors animate-pulse hover:animate-none">
+                                
+                                <div>
+                                    <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wide mb-1">Unggah Draft Final (PDF)</label>
+                                    <input type="file" name="file_draft_final" id="file_draft_final" accept="application/pdf" required class="block w-full text-xs text-gray-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                                </div>
+
+                                <button type="button" onclick="confirmDaftarSidang()" class="w-full inline-flex justify-center items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors animate-pulse hover:animate-none">
                                     <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                     Daftar Sidang Akhir
                                 </button>
                             </form>
+
+                            <script>
+                                function confirmDaftarSidang() {
+                                    const fileInput = document.getElementById('file_draft_final');
+                                    if (!fileInput.value) {
+                                        Swal.fire({
+                                            icon: 'warning',
+                                            title: 'Dokumen Belum Dipilih',
+                                            text: 'Silakan pilih file Draft Final Skripsi (PDF) terlebih dahulu.',
+                                            confirmButtonColor: '#4f46e5',
+                                        });
+                                        return;
+                                    }
+
+                                    Swal.fire({
+                                        title: 'Daftar Sidang Akhir?',
+                                        text: "Pastikan dokumen draft final yang Anda unggah sudah benar dan sesuai dengan arahan pembimbing.",
+                                        icon: 'question',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#059669',
+                                        cancelButtonColor: '#d33',
+                                        confirmButtonText: 'Ya, Daftar Sekarang',
+                                        cancelButtonText: 'Batal',
+                                        background: '#ffffff',
+                                        borderRadius: '1rem',
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.getElementById('formDaftarSidang').submit();
+                                        }
+                                    })
+                                }
+                            </script>
                         @endif
                     </div>
                 @endif

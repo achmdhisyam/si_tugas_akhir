@@ -135,4 +135,22 @@ class BimbinganController extends Controller
 
         return back()->with('success', 'Reviu bimbingan berhasil disimpan.');
     }
+
+    /**
+     * Dosen Pembimbing mengubah progress mahasiswa secara manual.
+     */
+    public function overrideProgress(\Illuminate\Http\Request $request, Skripsi $skripsi)
+    {
+        if ($skripsi->dosen_id !== Auth::id() && $skripsi->dosen_id_2 !== Auth::id()) {
+            abort(403, 'Anda bukan pembimbing skripsi ini.');
+        }
+
+        $request->validate([
+            'progress' => 'required|integer|min:0|max:100',
+        ]);
+
+        $skripsi->update(['progress' => $request->progress]);
+
+        return back()->with('success', 'Progress mahasiswa berhasil diubah secara manual menjadi ' . $request->progress . '%.');
+    }
 }

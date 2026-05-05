@@ -33,6 +33,7 @@ class SidangController extends Controller
     {
         $request->validate([
             'skripsi_id' => 'required|exists:skripsis,id',
+            'file_draft_final' => 'required|mimes:pdf|max:10240', // Maksimal 10MB
         ]);
 
         $skripsi = Skripsi::findOrFail($request->skripsi_id);
@@ -54,6 +55,10 @@ class SidangController extends Controller
         if ($existing) {
             return back()->with('error', 'Anda sudah mendaftar sidang.');
         }
+
+        // Simpan File Draft Final
+        $path = $request->file('file_draft_final')->store('draft_final', 'public');
+        $skripsi->update(['file_draft_final' => $path]);
 
         $jadwal = JadwalSidang::create([
             'skripsi_id' => $skripsi->id,
@@ -81,8 +86,9 @@ class SidangController extends Controller
             ->get();
 
         $dosens = User::where('role', 'dosen')->get();
+        $ruangans = \App\Models\Ruangan::all();
 
-        return view('admin.sidang.index', compact('jadwalSidangs', 'dosens'));
+        return view('admin.sidang.index', compact('jadwalSidangs', 'dosens', 'ruangans'));
     }
 
     /**
@@ -96,6 +102,32 @@ class SidangController extends Controller
             'penguji_1_id' => 'required|exists:users,id',
             'penguji_2_id' => 'required|exists:users,id|different:penguji_1_id',
         ]);
+
+        $tanggal = \Carbon\Carbon::parse($request->tanggal);
+
+        // 1. Cek Bentrok Ruangan
+        $bentrokRuangan = JadwalSidang::where('tanggal', $tanggal)
+            ->where('ruangan', $request->ruangan)
+            ->where('id', '!=', $jadwal->id)
+            ->where('status', 'dijadwalkan')
+            ->exists();
+
+        if ($bentrokRuangan) {
+            return back()->with('error', 'Gagal: Ruangan sudah terpakai pada tanggal dan jam tersebut.');
+        }
+
+        // 2. Cek Bentrok Dosen
+        $bentrokDosen = JadwalSidang::where('tanggal', $tanggal)
+            ->where('id', '!=', $jadwal->id)
+            ->where('status', 'dijadwalkan')
+            ->where(function ($query) use ($request) {
+                $query->whereIn('penguji_1_id', [$request->penguji_1_id, $request->penguji_2_id])
+                      ->orWhereIn('penguji_2_id', [$request->penguji_1_id, $request->penguji_2_id]);
+            })->exists();
+
+        if ($bentrokDosen) {
+            return back()->with('error', 'Gagal: Salah satu Dosen Penguji sudah memiliki jadwal sidang di waktu yang persis sama.');
+        }
 
         $jadwal->update([
             'tanggal' => $request->tanggal,
@@ -132,9 +164,14 @@ class SidangController extends Controller
      */
     public function indexMenguji()
     {
+        $userId = Auth::id();
         $jadwalSidangs = JadwalSidang::with(['skripsi.mahasiswa', 'skripsi.pembimbing', 'skripsi.pembimbing2', 'penguji1', 'penguji2'])
-            ->where('penguji_1_id', Auth::id())
-            ->orWhere('penguji_2_id', Auth::id())
+            ->where('penguji_1_id', $userId)
+            ->orWhere('penguji_2_id', $userId)
+            ->orWhereHas('skripsi', function ($query) use ($userId) {
+                $query->where('dosen_id', $userId)
+                      ->orWhere('dosen_id_2', $userId);
+            })
             ->orderBy('tanggal', 'asc')
             ->get();
 
@@ -162,5 +199,85 @@ class SidangController extends Controller
         ]);
 
         return back()->with('success', 'Nilai dan status kelulusan berhasil disimpan.');
+    }
+
+    /**
+     * Mahasiswa mengunggah dokumen revisi.
+     */
+    public function uploadRevisi(Request $request)
+    {
+        $request->validate([
+            'skripsi_id' => 'required|exists:skripsis,id',
+            'file_revisi' => 'required|mimes:pdf|max:10240',
+        ]);
+
+        $skripsi = Skripsi::findOrFail($request->skripsi_id);
+
+        if ($skripsi->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $path = $request->file('file_revisi')->store('revisi', 'public');
+        
+        $skripsi->update([
+            'file_revisi' => $path,
+            'status_revisi' => 'menunggu',
+            // Reset ACC dosen jika upload ulang
+            'acc_pembimbing_1' => false,
+            'acc_pembimbing_2' => false,
+            'acc_penguji_1' => false,
+            'acc_penguji_2' => false,
+        ]);
+
+        return back()->with('success', 'Dokumen revisi berhasil diunggah. Menunggu persetujuan dosen.');
+    }
+
+    /**
+     * Dosen memberikan ACC untuk dokumen revisi.
+     */
+    public function accRevisi(Request $request, Skripsi $skripsi)
+    {
+        $userId = Auth::id();
+        $isUpdated = false;
+
+        if ($skripsi->dosen_id === $userId) {
+            $skripsi->acc_pembimbing_1 = true;
+            $isUpdated = true;
+        }
+        if ($skripsi->dosen_id_2 === $userId) {
+            $skripsi->acc_pembimbing_2 = true;
+            $isUpdated = true;
+        }
+
+        $jadwalAkhir = $skripsi->jadwalSidangs()->where('jenis', 'Akhir')->first();
+        if ($jadwalAkhir) {
+            if ($jadwalAkhir->penguji_1_id === $userId) {
+                $skripsi->acc_penguji_1 = true;
+                $isUpdated = true;
+            }
+            if ($jadwalAkhir->penguji_2_id === $userId) {
+                $skripsi->acc_penguji_2 = true;
+                $isUpdated = true;
+            }
+        }
+
+        if (!$isUpdated) {
+            abort(403);
+        }
+
+        // Cek jika semua harus ACC
+        $allAcc = true;
+        if (!$skripsi->acc_pembimbing_1) $allAcc = false;
+        if ($skripsi->dosen_id_2 && !$skripsi->acc_pembimbing_2) $allAcc = false;
+        if ($jadwalAkhir && $jadwalAkhir->penguji_1_id && !$skripsi->acc_penguji_1) $allAcc = false;
+        if ($jadwalAkhir && $jadwalAkhir->penguji_2_id && !$skripsi->acc_penguji_2) $allAcc = false;
+
+        if ($allAcc) {
+            $skripsi->status_revisi = 'selesai';
+        }
+
+        $skripsi->save();
+
+        return back()->with('success', 'Revisi berhasil disetujui.');
     }
 }

@@ -65,6 +65,16 @@
                                 <p><span class="font-semibold w-24 inline-block">Penguji 2:</span> {{ $jadwal->penguji2 ? $jadwal->penguji2->name : '-' }} {{ Auth::id() === $jadwal->penguji_2_id ? '(Anda)' : '' }}</p>
                             </div>
 
+                            @if($jadwal->skripsi->file_draft_final)
+                                <div class="mt-4 pt-4 border-t border-gray-200">
+                                    <h5 class="text-xs font-bold text-gray-800 mb-2">Dokumen Sidang</h5>
+                                    <a href="{{ Storage::url($jadwal->skripsi->file_draft_final) }}" target="_blank" class="inline-flex items-center text-xs font-medium text-indigo-700 bg-indigo-50 px-3 py-1.5 rounded hover:bg-indigo-100 transition-colors">
+                                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                        Unduh Draft Final
+                                    </a>
+                                </div>
+                            @endif
+
                             @if($jadwal->status === 'selesai')
                                 <div class="mt-4 pt-4 border-t border-gray-200 flex justify-between items-center">
                                     <div>
@@ -82,6 +92,43 @@
                                         <p class="text-2xl font-bold text-indigo-700">{{ $jadwal->nilai }}</p>
                                     </div>
                                 </div>
+
+                                <!-- Validasi Revisi -->
+                                @if($jadwal->status_kelulusan === 'revisi' && $jadwal->skripsi->file_revisi)
+                                    @php
+                                        $isPembimbing1 = Auth::id() === $jadwal->skripsi->dosen_id;
+                                        $isPembimbing2 = Auth::id() === $jadwal->skripsi->dosen_id_2;
+                                        $isPenguji1 = Auth::id() === $jadwal->penguji_1_id;
+                                        $isPenguji2 = Auth::id() === $jadwal->penguji_2_id;
+
+                                        $hasAcc = false;
+                                        if ($isPembimbing1 && $jadwal->skripsi->acc_pembimbing_1) $hasAcc = true;
+                                        if ($isPembimbing2 && $jadwal->skripsi->acc_pembimbing_2) $hasAcc = true;
+                                        if ($isPenguji1 && $jadwal->skripsi->acc_penguji_1) $hasAcc = true;
+                                        if ($isPenguji2 && $jadwal->skripsi->acc_penguji_2) $hasAcc = true;
+                                    @endphp
+                                    <div class="mt-4 p-4 border border-amber-200 bg-amber-50 rounded-lg">
+                                        <h5 class="text-xs font-bold text-amber-800 mb-2">Validasi Dokumen Revisi</h5>
+                                        <a href="{{ Storage::url($jadwal->skripsi->file_revisi) }}" target="_blank" class="inline-flex items-center text-xs font-medium text-amber-700 bg-amber-100 px-3 py-1.5 rounded hover:bg-amber-200 transition-colors mb-3">
+                                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                            Lihat Dokumen Revisi
+                                        </a>
+
+                                        @if(!$hasAcc)
+                                            <form id="formAccRevisi-{{ $jadwal->skripsi->id }}" action="{{ route('dosen.sidang.acc_revisi', $jadwal->skripsi->id) }}" method="POST">
+                                                @csrf
+                                                <button type="button" onclick="confirmAccRevisi({{ $jadwal->skripsi->id }}, '{{ $jadwal->skripsi->mahasiswa->name }}')" class="w-full bg-emerald-600 text-white text-xs font-bold py-2 rounded shadow-sm hover:bg-emerald-700 transition-colors">
+                                                    ACC Revisi Mahasiswa
+                                                </button>
+                                            </form>
+                                        @else
+                                            <div class="p-2 bg-emerald-100 border border-emerald-200 text-emerald-800 rounded text-xs font-bold text-center">
+                                                Anda telah menyetujui revisi ini.
+                                            </div>
+                                        @endif
+                                    </div>
+                                @endif
+
                             @elseif(Auth::id() === $jadwal->penguji_1_id)
                                 <button @click="openForm = !openForm" class="w-full mt-2 bg-indigo-600 text-white text-xs font-medium py-2 rounded shadow-sm hover:bg-indigo-700 transition-colors">
                                     <span x-text="openForm ? 'Tutup Form Nilai' : 'Input Nilai & Keputusan'"></span>
@@ -89,7 +136,7 @@
 
                                 <!-- Form Input Nilai -->
                                 <div x-show="openForm" x-transition class="mt-4 p-4 bg-white border border-indigo-200 rounded-lg shadow-sm" style="display: none;">
-                                    <form action="{{ route('dosen.sidang.nilai', $jadwal->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin dengan nilai ini? Data yang sudah disimpan tidak bisa diubah oleh dosen lagi.');">
+                                    <form id="formNilai-{{ $jadwal->id }}" action="{{ route('dosen.sidang.nilai', $jadwal->id) }}" method="POST">
                                         @csrf
                                         
                                         <div class="mb-3">
@@ -107,7 +154,7 @@
                                             </select>
                                         </div>
 
-                                        <button type="submit" class="w-full bg-emerald-600 text-white text-xs font-medium py-2 rounded hover:bg-emerald-700 transition-colors shadow-sm">
+                                        <button type="button" onclick="confirmSimpanNilai({{ $jadwal->id }}, '{{ $jadwal->skripsi->mahasiswa->name }}')" class="w-full bg-emerald-600 text-white text-xs font-medium py-2 rounded hover:bg-emerald-700 transition-colors shadow-sm">
                                             Simpan Nilai
                                         </button>
                                         <p class="text-[10px] text-gray-400 mt-2 text-center">Sebagai Ketua Penguji (Penguji 1), Anda bertanggung jawab memasukkan nilai akhir.</p>
@@ -132,4 +179,40 @@
             @endif
         </div>
     </div>
+
+    <script>
+        function confirmSimpanNilai(id, name) {
+            Swal.fire({
+                title: 'Simpan Nilai?',
+                text: "Anda akan menyimpan nilai untuk " + name + ". Data yang sudah disimpan tidak bisa diubah kembali oleh Anda.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#059669',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Simpan',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('formNilai-' + id).submit();
+                }
+            })
+        }
+
+        function confirmAccRevisi(id, name) {
+            Swal.fire({
+                title: 'Setujui Revisi?',
+                text: "Apakah Anda yakin dokumen revisi dari " + name + " sudah sesuai dan layak disetujui?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#059669',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Setujui',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('formAccRevisi-' + id).submit();
+                }
+            })
+        }
+    </script>
 </x-app-layout>

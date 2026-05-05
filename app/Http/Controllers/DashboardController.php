@@ -34,7 +34,26 @@ class DashboardController extends Controller
                     'disetujui' => \App\Models\Skripsi::where('status', 'disetujui')->count(),
                     'ditolak' => \App\Models\Skripsi::where('status', 'ditolak')->count(),
                 ];
-                return view('dashboard.kaprodi', compact('stats'));
+
+                // Data Grafik
+                $chartData = [
+                    'sedang_skripsi' => \App\Models\Skripsi::where('status', 'disetujui')->where('progress', '<', 100)->count(),
+                    'siap_sidang' => \App\Models\Skripsi::where('status', 'disetujui')->where('progress', 100)->count(),
+                    // Asumsi: status di jadwal sidang = selesai dan status_kelulusan = lulus
+                    'lulus' => \App\Models\JadwalSidang::where('status', 'selesai')->where('status_kelulusan', 'lulus')->count(),
+                ];
+
+                // Mahasiswa Macet: Skripsi disetujui, progress < 100, tidak ada bimbingan > 30 hari
+                $thirtyDaysAgo = \Carbon\Carbon::now()->subDays(30);
+                $mahasiswaMacet = \App\Models\Skripsi::with('mahasiswa', 'pembimbing')
+                    ->where('status', 'disetujui')
+                    ->where('progress', '<', 100)
+                    ->whereDoesntHave('bimbingans', function ($query) use ($thirtyDaysAgo) {
+                        $query->where('created_at', '>=', $thirtyDaysAgo);
+                    })
+                    ->get();
+
+                return view('dashboard.kaprodi', compact('stats', 'chartData', 'mahasiswaMacet'));
             case 'admin':
                 $users = \App\Models\User::orderBy('created_at', 'desc')->paginate(10);
                 return view('dashboard.admin', compact('users'));
@@ -42,5 +61,25 @@ class DashboardController extends Controller
                 // Fallback jika tidak ada role yang cocok
                 return view('dashboard');
         }
+    }
+
+    /**
+     * Kaprodi mengingatkan dosen pembimbing mahasiswa macet.
+     */
+    public function ingatkanDosen(\Illuminate\Http\Request $request, \App\Models\Skripsi $skripsi)
+    {
+        if (Auth::user()->role !== 'kaprodi') {
+            abort(403);
+        }
+
+        if ($skripsi->pembimbing) {
+            $skripsi->pembimbing->notify(new \App\Notifications\PengingatBimbinganNotification($skripsi));
+        }
+        
+        if ($skripsi->pembimbing2) {
+            $skripsi->pembimbing2->notify(new \App\Notifications\PengingatBimbinganNotification($skripsi));
+        }
+
+        return back()->with('success', 'Pengingat berhasil dikirim ke Dosen Pembimbing.');
     }
 }

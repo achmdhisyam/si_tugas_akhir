@@ -25,7 +25,7 @@
                     <p class="text-sm text-gray-800 font-medium">{{ $skripsi->judul }}</p>
                 </div>
 
-                <div class="mb-5">
+                    <div class="mb-5">
                     <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Tingkat Penyelesaian</p>
                     <div class="flex justify-between items-center mb-1">
                         <span class="text-sm font-bold text-emerald-600">{{ $skripsi->progress }}%</span>
@@ -33,6 +33,34 @@
                     <div class="w-full bg-gray-200 rounded-full h-2.5">
                         <div class="bg-emerald-500 h-2.5 rounded-full" style="width: {{ $skripsi->progress }}%"></div>
                     </div>
+                </div>
+
+                <!-- Form Override Progress -->
+                <div class="border-t border-gray-100 pt-5 mt-5">
+                    <p class="text-xs font-semibold text-indigo-800 uppercase tracking-wider mb-3">Update Progress Manual</p>
+                    <form action="{{ route('dosen.bimbingan.override', $skripsi->id) }}" method="POST" class="flex gap-2" id="override-form">
+                        @csrf
+                        <input type="number" name="progress" min="0" max="100" value="{{ $skripsi->progress }}" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                        <button type="button" onclick="
+                            Swal.fire({
+                                title: 'Update Progress?',
+                                text: 'Anda akan mengubah progress mahasiswa ini secara manual.',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#4f46e5',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Ya, Ubah!',
+                                cancelButtonText: 'Batal'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    document.getElementById('override-form').submit();
+                                }
+                            })
+                        " class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md shadow-sm transition-colors">
+                            Simpan
+                        </button>
+                    </form>
+                    <p class="text-[10px] text-gray-400 mt-2 leading-tight">Gunakan fitur ini jika Anda ingin langsung memajukan/memundurkan progress tanpa harus menunggu ACC bimbingan (misal: langsung set 100% jika sudah siap sidang).</p>
                 </div>
             </div>
         </div>

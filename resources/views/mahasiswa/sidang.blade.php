@@ -76,6 +76,50 @@
                                         </div>
                                     @endif
                                 </div>
+                                
+                                @if($jadwal->status === 'selesai' && $jadwal->status_kelulusan === 'revisi')
+                                    <div class="mt-4 p-4 border border-amber-200 bg-amber-50 rounded-lg">
+                                        <h5 class="text-sm font-bold text-amber-800 mb-2">Tindakan Diperlukan: Unggah Dokumen Revisi</h5>
+                                        
+                                        @if($skripsi->status_revisi === 'belum')
+                                            <form action="{{ route('mahasiswa.sidang.upload_revisi') }}" method="POST" enctype="multipart/form-data" class="flex items-center gap-3">
+                                                @csrf
+                                                <input type="hidden" name="skripsi_id" value="{{ $skripsi->id }}">
+                                                <input type="file" name="file_revisi" accept="application/pdf" required class="block w-full text-xs text-gray-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-amber-100 file:text-amber-800 hover:file:bg-amber-200">
+                                                <button type="submit" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded shadow-sm whitespace-nowrap">
+                                                    Kirim Revisi
+                                                </button>
+                                            </form>
+                                        @elseif($skripsi->status_revisi === 'menunggu')
+                                            <p class="text-xs text-amber-700 font-medium">Dokumen revisi telah diunggah. Menunggu persetujuan (ACC) dari Pembimbing dan Penguji.</p>
+                                            
+                                            <!-- Status ACC Dosen -->
+                                            <div class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+                                                <div class="p-2 rounded {{ $skripsi->acc_pembimbing_1 ? 'bg-emerald-100 text-emerald-800' : 'bg-white border border-amber-200 text-amber-800' }}">
+                                                    <span class="block font-bold">Pembimbing 1</span>
+                                                    {{ $skripsi->acc_pembimbing_1 ? 'Disetujui' : 'Menunggu' }}
+                                                </div>
+                                                <div class="p-2 rounded {{ $skripsi->acc_pembimbing_2 ? 'bg-emerald-100 text-emerald-800' : 'bg-white border border-amber-200 text-amber-800' }}">
+                                                    <span class="block font-bold">Pembimbing 2</span>
+                                                    {{ $skripsi->acc_pembimbing_2 ? 'Disetujui' : 'Menunggu' }}
+                                                </div>
+                                                <div class="p-2 rounded {{ $skripsi->acc_penguji_1 ? 'bg-emerald-100 text-emerald-800' : 'bg-white border border-amber-200 text-amber-800' }}">
+                                                    <span class="block font-bold">Penguji 1</span>
+                                                    {{ $skripsi->acc_penguji_1 ? 'Disetujui' : 'Menunggu' }}
+                                                </div>
+                                                <div class="p-2 rounded {{ $skripsi->acc_penguji_2 ? 'bg-emerald-100 text-emerald-800' : 'bg-white border border-amber-200 text-amber-800' }}">
+                                                    <span class="block font-bold">Penguji 2</span>
+                                                    {{ $skripsi->acc_penguji_2 ? 'Disetujui' : 'Menunggu' }}
+                                                </div>
+                                            </div>
+                                        @elseif($skripsi->status_revisi === 'selesai')
+                                            <div class="flex items-center text-emerald-700">
+                                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                                <span class="text-sm font-bold">Revisi Selesai dan Telah Disetujui Semua Dosen.</span>
+                                            </div>
+                                        @endif
+                                    </div>
+                                @endif
                             @else
                                 <p class="text-sm text-gray-600 mt-2">Pendaftaran Anda telah diterima. Silakan menunggu Admin Tata Usaha untuk menetapkan waktu, ruang, dan dosen penguji.</p>
                             @endif
