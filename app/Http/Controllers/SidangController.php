@@ -20,7 +20,7 @@ class SidangController extends Controller
             ->first();
 
         if (!$skripsi) {
-            abort(404, 'Skripsi tidak ditemukan.');
+            return redirect()->route('dashboard')->with('error', 'Anda belum mengajukan judul skripsi. Silakan ajukan judul terlebih dahulu.');
         }
 
         return view('mahasiswa.sidang', compact('skripsi'));

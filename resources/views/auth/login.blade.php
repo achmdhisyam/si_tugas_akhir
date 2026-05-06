@@ -87,13 +87,11 @@
 
                     <div class="h-px w-16 bg-white/30 mx-auto mb-6"></div>
 
-                    <p class="text-indigo-200 text-xs leading-relaxed max-w-xs mx-auto">
-                        Platform digital terpadu untuk pengajuan skripsi, bimbingan, hingga sidang akhir mahasiswa.
-                    </p>
+                   
                 </div>
 
                 <!-- Bottom URL -->
-                <p class="absolute bottom-5 text-indigo-300 text-xs relative z-10">siata.kampus.ac.id</p>
+               
             </div>
 
             <!-- ===== RIGHT: Login Form ===== -->
@@ -101,7 +99,7 @@
 
                 <!-- Greeting -->
                 <div class="mb-8">
-                    <p class="text-sm text-gray-400 font-medium mb-0.5">Halo! 👋</p>
+                    <p class="text-sm text-gray-400 font-medium mb-0.5">Halo! </p>
                     <h2 class="text-2xl font-extrabold text-indigo-700 mb-1">Selamat Datang</h2>
                     <p class="text-gray-500 text-sm">Silakan login ke akun Anda</p>
                 </div>
