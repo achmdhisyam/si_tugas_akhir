@@ -50,7 +50,7 @@ Ikuti langkah-langkah di bawah ini untuk menjalankan aplikasi di pc lokal Anda:
 1. **Clone repositori ini**
 
     ```bash
-    git clone <url-repo-anda>
+    git clone https://github.com/achmdhisyam/si_tugas_akhir
     cd si_tugas_akhir
     ```
 
