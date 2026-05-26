@@ -15,11 +15,11 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    // Rute Mahasiswa: Pengajuan Skripsi
+    // Rute Mahasiswa Pengajuan Skripsi
     Route::get('/pengajuan-skripsi', [SkripsiController::class, 'create'])->name('skripsi.create');
     Route::post('/pengajuan-skripsi', [SkripsiController::class, 'store'])->name('skripsi.store');
 
-    // Rute Kaprodi: Validasi Skripsi
+    // Rute Kaprodi Validasi Skripsi
     Route::get('/kaprodi/validasi-judul', [\App\Http\Controllers\SkripsiController::class, 'indexKaprodi'])->name('kaprodi.validasi');
     Route::post('/skripsi/{skripsi}/validasi', [\App\Http\Controllers\SkripsiController::class, 'validasi'])->name('skripsi.validasi');
     Route::post('/dashboard/ingatkan-dosen/{skripsi}', [\App\Http\Controllers\DashboardController::class, 'ingatkanDosen'])->name('kaprodi.ingatkan-dosen');

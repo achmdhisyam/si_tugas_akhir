@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('file_progres')->nullable();
             $table->date('tanggal');
             $table->text('catatan')->nullable();
+            $table->enum('status', ['pending', 'disetujui', 'direvisi'])->default('pending');
+            $table->text('catatan_dosen')->nullable();
             $table->timestamps();
         });
     }

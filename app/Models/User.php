@@ -49,7 +49,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Relasi mahasiswa ke skripsinya (1-1).
+     * Relasi mahasiswa ke skripsinya (1-1)
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
@@ -59,7 +59,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Relasi pembimbing ke skripsi bimbingannya (1-N).
+     * Relasi pembimbing ke skripsi bimbingannya (1-N)
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -69,7 +69,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Relasi penguji ke jadwal sidang ujiannya (1-N).
+     * Relasi penguji ke jadwal sidang ujiannya (1-N)
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

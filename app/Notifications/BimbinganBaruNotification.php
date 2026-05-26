@@ -54,7 +54,7 @@ class BimbinganBaruNotification extends Notification
             'type' => 'bimbingan_baru',
             'bimbingan_id' => $this->bimbingan->id,
             'title' => 'Logbook Bimbingan Baru',
-            'message' => 'Mahasiswa ' . $this->bimbingan->skripsi->mahasiswa->name . ' mengirimkan progres bimbingan.',
+            'message' => 'Mahasiswa ' . $this->bimbingan->skripsi->mahasiswa->name . ' mengirimkan progres bimbingan',
             'url' => route('dosen.bimbingan.show', $this->bimbingan->skripsi_id),
         ];
     }

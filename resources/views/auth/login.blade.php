@@ -11,7 +11,6 @@
         <style>
             body { font-family: 'Inter', sans-serif; }
 
-            /* Animated fluid background – left panel */
             .fluid-bg {
                 background: linear-gradient(135deg, #312e81 0%, #4338ca 40%, #6d28d9 70%, #4f46e5 100%);
                 position: relative;
@@ -40,7 +39,6 @@
                 100% { transform: translate(-10px, 20px) scale(0.95); }
             }
 
-            /* Input underline style */
             .input-line {
                 border: none;
                 border-bottom: 2px solid #e5e7eb;
@@ -60,13 +58,10 @@
     </head>
     <body class="antialiased min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-purple-50 to-indigo-200 p-4">
 
-        <!-- Outer Card -->
         <div class="w-full max-w-4xl min-h-[520px] flex rounded-2xl shadow-2xl overflow-hidden">
 
-            <!-- ===== LEFT: Branding Panel ===== -->
             <div class="fluid-bg flex w-[40%] sm:w-[45%] flex-col items-center justify-center relative p-10 text-center">
 
-                <!-- Decorative blobs -->
                 <div class="blob blob-1"></div>
                 <div class="blob blob-2"></div>
                 <div class="blob blob-3"></div>
@@ -90,28 +85,23 @@
                    
                 </div>
 
-                <!-- Bottom URL -->
                
             </div>
 
-            <!-- ===== RIGHT: Login Form ===== -->
             <div class="flex-1 bg-white flex flex-col justify-center px-8 sm:px-12 py-10">
 
-                <!-- Greeting -->
                 <div class="mb-8">
                     <p class="text-sm text-gray-400 font-medium mb-0.5">Halo! </p>
                     <h2 class="text-2xl font-extrabold text-indigo-700 mb-1">Selamat Datang</h2>
                     <p class="text-gray-500 text-sm">Silakan login ke akun Anda</p>
                 </div>
 
-                <!-- Session status -->
                 @if(session('status'))
                     <div class="mb-5 p-3 text-sm bg-green-50 text-green-700 border border-green-200 rounded-lg">
                         {{ session('status') }}
                     </div>
                 @endif
 
-                <!-- Errors -->
                 @if($errors->any())
                     <div class="mb-5 p-3 text-sm bg-red-50 text-red-700 border border-red-100 rounded-lg">
                         @foreach($errors->all() as $err) <p>{{ $err }}</p> @endforeach
@@ -139,7 +129,6 @@
                             class="input-line {{ $errors->get('password') ? 'is-error' : '' }}">
                     </div>
 
-                    <!-- Remember + Forgot -->
                     <div class="flex items-center justify-between">
                         <label class="flex items-center gap-2 cursor-pointer select-none text-sm text-gray-500">
                             <input type="checkbox" name="remember" id="remember_me"
@@ -163,7 +152,6 @@
                 </form>
 
             </div>
-            <!-- ===== END RIGHT ===== -->
 
         </div>
 

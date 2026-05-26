@@ -10,7 +10,6 @@
                 <p class="text-sm text-gray-500 mt-1">Silakan lengkapi form di bawah ini untuk mengajukan judul skripsi baru. Pastikan draft telah sesuai dengan panduan.</p>
             </div>
 
-            <!-- Form Pengajuan -->
             <form action="{{ route('skripsi.store') }}" method="POST" enctype="multipart/form-data" id="form-pengajuan" @submit.prevent="
                 Swal.fire({
                     title: 'Ajukan Judul?',
@@ -29,7 +28,6 @@
             ">
                 @csrf
                 
-                <!-- Input Judul -->
                 <div class="mb-6">
                     <label for="judul" class="block text-sm font-medium text-gray-700 mb-2">Judul Skripsi <span class="text-red-500">*</span></label>
                     <textarea id="judul" name="judul" rows="3" required
@@ -38,7 +36,6 @@
                     <p class="mt-1 text-xs text-gray-500">Maksimal 255 karakter.</p>
                 </div>
 
-                <!-- Input File Draft -->
                 <div class="mb-8" x-data="{ fileName: null }">
                     <label class="block text-sm font-medium text-gray-700 mb-2">File Draft Proposal <span class="text-red-500">*</span></label>
                     <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md hover:border-indigo-400 transition-colors" :class="fileName ? 'bg-indigo-50 border-indigo-300' : 'bg-gray-50'">
@@ -63,7 +60,6 @@
                     </div>
                 </div>
 
-                <!-- Tombol Aksi -->
                 <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-100">
                     <a href="{{ route('dashboard') }}" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors">
                         Batal

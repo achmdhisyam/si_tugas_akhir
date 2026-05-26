@@ -7,26 +7,22 @@
 
         <title>{{ config('app.name', 'SIATA') }}</title>
 
-        <!-- Fonts: Inter -->
+
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-        <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <!-- Alpine.js state untuk sidebar via attribute x-data -->
     <body class="font-sans antialiased bg-gray-100 text-gray-900 flex h-screen overflow-hidden" x-data="{ sidebarOpen: false }">
         
-        <!-- Sidebar Navigation (Indigo-900) -->
         <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="fixed inset-y-0 left-0 z-50 w-64 bg-indigo-900 text-white transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-auto flex flex-col shadow-xl">
-            <!-- Sidebar Header -->
             <div class="flex items-center justify-center h-16 border-b border-indigo-800">
                 <span class="text-2xl font-bold tracking-wider">SIATA</span>
             </div>
 
             <!-- Menu Links Berdasarkan Role -->
             <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-                <!-- Komentar: Active State ditentukan dari request()->routeIs('dashboard') -->
+
                 <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-3 rounded-lg transition-colors {{ request()->routeIs('dashboard') ? 'bg-indigo-800 text-white font-medium shadow-sm' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white' }}">
                     <!-- Heroicon: Home -->
                     <svg class="w-5 h-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -102,7 +98,7 @@
                 @endif
             </nav>
 
-            <!-- Sidebar Footer (Logout) -->
+            <!-- Sidebar Footer -->
             <div class="p-4 border-t border-indigo-800">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
@@ -130,7 +126,7 @@
                     </button>
                 </div>
 
-                <!-- Right Side (Notifications & User) -->
+                <!-- Right Side -->
                 <div class="flex items-center space-x-4">
                     <!-- Notifications Dropdown -->
                     <div x-data="{ notifOpen: false }" class="relative">
@@ -171,7 +167,7 @@
                         </div>
                     </div>
 
-                    <!-- User Dropdown (Top Right) -->
+                    <!-- Dropdown User -->
                     <div x-data="{ dropdownOpen: false }" class="relative">
                         <button @click="dropdownOpen = !dropdownOpen" class="flex items-center space-x-3 focus:outline-none">
                             <span class="text-sm font-semibold text-gray-700">{{ Auth::user()->name }}</span>
@@ -190,19 +186,19 @@
 
             <!-- Main Content Area -->
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50 p-6 md:p-8">
-                <!-- Header Component (Judul Halaman) -->
+                <!-- Header Component -->
                 @isset($header)
                     <div class="mb-8">
                         <h1 class="text-3xl font-bold text-gray-900 tracking-tight">{{ $header }}</h1>
                     </div>
                 @endisset
 
-                <!-- Slot untuk Konten Utama yang Diberikan Oleh Tampilan Anak -->
+                <!-- Slot untuk Konten Utama -->
                 {{ $slot }}
             </main>
         </div>
 
-        <!-- Overlay Hitam untuk Sidebar Mobile -->
+        <!-- Overlay Sidebar Mobile -->
         <div x-show="sidebarOpen" @click="sidebarOpen = false" class="fixed inset-0 z-40 bg-gray-900 bg-opacity-50 lg:hidden transition-opacity" style="display: none;"></div>
 
         <!-- SweetAlert2 -->

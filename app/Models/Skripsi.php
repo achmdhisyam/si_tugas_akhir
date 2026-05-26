@@ -30,7 +30,7 @@ class Skripsi extends Model
     ];
 
     /**
-     * Relasi ke mahasiswa pemilik skripsi.
+     * Relasi ke mahasiswa pemilik skripsi
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -40,7 +40,7 @@ class Skripsi extends Model
     }
 
     /**
-     * Relasi ke dosen pembimbing 1 skripsi.
+     * Relasi ke dosen pembimbing 1 skripsi
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -50,7 +50,7 @@ class Skripsi extends Model
     }
 
     /**
-     * Relasi ke dosen pembimbing 2 skripsi.
+     * Relasi ke dosen pembimbing 2 skripsi
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -60,7 +60,7 @@ class Skripsi extends Model
     }
 
     /**
-     * Relasi ke bimbingan.
+     * Relasi ke bimbingan
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -70,7 +70,7 @@ class Skripsi extends Model
     }
 
     /**
-     * Relasi ke jadwal sidang.
+     * Relasi ke jadwal sidang
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

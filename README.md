@@ -1,59 +1,105 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistem Informasi Tugas Akhir (SI Tugas Akhir)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistem Informasi Tugas Akhir adalah aplikasi berbasis web yang dibangun menggunakan **Laravel 11** untuk mengelola dan memonitor seluruh proses skripsi mahasiswa, mulai dari pengajuan judul, proses bimbingan, hingga pendaftaran dan pelaksanaan sidang skripsi.
 
-## About Laravel
+## Fitur Utama
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Aplikasi ini memiliki beberapa peran (Role) dengan hak akses yang berbeda-beda:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Mahasiswa
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Mengajukan judul skripsi beserta calon dosen pembimbing.
+- Mengisi dan melaporkan _logbook_ bimbingan rutin kepada dosen pembimbing.
+- Memantau persentase _progress_ skripsi.
+- Mendaftar jadwal Sidang (Proposal maupun Sidang Akhir).
+- Melihat riwayat revisi dan status kelulusan.
 
-## Learning Laravel
+### Dosen Pembimbing & Penguji
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- Menerima notifikasi dan me-review pengajuan bimbingan (ACC atau Revisi) beserta catatannya.
+- Memantau _progress_ bimbingan mahasiswa wali (anak bimbingan).
+- Mengubah _progress_ persentase mahasiswa secara manual jika diperlukan.
+- Bertindak sebagai penguji dalam sidang dan memberikan penilaian.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Kaprodi (Kepala Program Studi)
 
-## Laravel Sponsors
+- Melakukan validasi (Setuju/Tolak) atas pengajuan judul skripsi mahasiswa.
+- Memantau statistik mahasiswa skripsi melalui Dashboard Kaprodi.
+- Mengidentifikasi mahasiswa yang "terkendala" (macet bimbingan lebih dari 30 hari).
+- Mengirimkan pengingat (_reminder_) otomatis kepada dosen pembimbing terkait mahasiswa yang terkendala.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Admin
 
-### Premium Partners
+- Mengelola data master sistem (Master Ruangan Sidang, dll).
+- Melakukan penjadwalan sidang mahasiswa setelah mendapat persetujuan dosen.
+- Menentukan dosen penguji 1, penguji 2, dan ruangan sidang dengan sistem pengecekan bentrok jadwal otomatis.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+## Requirements
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- PHP >= 8.2
+- Composer
+- Database MySQL / MariaDB
+- Node.js & NPM (untuk kompilasi _asset_ frontend dengan Vite)
 
-## Code of Conduct
+## Instalasi
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Ikuti langkah-langkah di bawah ini untuk menjalankan aplikasi di pc lokal Anda:
 
-## Security Vulnerabilities
+1. **Clone repositori ini**
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    ```bash
+    git clone <url-repo-anda>
+    cd si_tugas_akhir
+    ```
 
-## License
+2. **Install dependensi PHP dan Node.js:**
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    ```bash
+    composer install
+    npm install
+    ```
+
+3. **Konfigurasi Environment:**
+   Salin file konfigurasi environment dan sesuaikan kredensial database Anda.
+
+    ```bash
+    cp .env.example .env
+    php artisan key:generate
+    ```
+
+4. **Migrasi Database dan Seeder:**
+   Aplikasi ini sudah dilengkapi dengan _Database Seeder_ terpusat yang otomatis membuatkan akun _dummy_ untuk Mahasiswa, Dosen, Kaprodi, dan Admin.
+
+    ```bash
+    php artisan migrate:fresh --seed
+    ```
+
+5. **Kompilasi Asset dan Jalankan Server:**
+   Buka dua terminal terpisah untuk menjalankan _development server_:
+    ```bash
+    npm run dev
+    ```
+    ```bash
+    php artisan serve
+    ```
+
+Aplikasi dapat diakses melalui browser di alamat `http://localhost:8000`.
+
+## Kredensial Default (Seeder)
+
+Setelah menjalankan `php artisan db:seed`, Anda dapat langsung masuk dengan menggunakan password `password` untuk semua akun di bawah ini:
+
+- **Admin:** `admin@gmail.com`
+- **Kaprodi:** `kaprodi@gmail.com`
+- **Dosen:** `dosen@gmail.com` (atau `budi@gmail.com` sebagai Dosen Pembimbing dummy)
+- **Mahasiswa:** `mahasiswa@gmail.com` (atau `andi@gmail.com` dan `siti@gmail.com` sebagai Mahasiswa dengan data logbook dummy)
+
+---
+
+## Teknologi yang Digunakan
+
+- **Backend:** Laravel 11
+- **Frontend:** Blade Templating, Tailwind CSS, Alpine.js
+- **Database:** MySQL

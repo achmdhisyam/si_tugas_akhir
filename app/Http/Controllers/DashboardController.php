@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    /**
-     * Menampilkan dashboard sesuai dengan role user yang sedang login.
-     */
+    // Menampilkan dashboard sesuai dengan role user yang sedang login   
     public function index()
     {
         $role = Auth::user()->role;
@@ -39,11 +37,10 @@ class DashboardController extends Controller
                 $chartData = [
                     'sedang_skripsi' => \App\Models\Skripsi::where('status', 'disetujui')->where('progress', '<', 100)->count(),
                     'siap_sidang' => \App\Models\Skripsi::where('status', 'disetujui')->where('progress', 100)->count(),
-                    // Asumsi: status di jadwal sidang = selesai dan status_kelulusan = lulus
                     'lulus' => \App\Models\JadwalSidang::where('status', 'selesai')->where('status_kelulusan', 'lulus')->count(),
                 ];
 
-                // Mahasiswa Macet: Skripsi disetujui, progress < 100, tidak ada bimbingan > 30 hari
+                // Mahasiswa terkendala: Skripsi disetujui, progress < 100, tidak ada bimbingan > 30 hari
                 $thirtyDaysAgo = \Carbon\Carbon::now()->subDays(30);
                 $mahasiswaMacet = \App\Models\Skripsi::with('mahasiswa', 'pembimbing')
                     ->where('status', 'disetujui')
@@ -63,9 +60,7 @@ class DashboardController extends Controller
         }
     }
 
-    /**
-     * Kaprodi mengingatkan dosen pembimbing mahasiswa macet.
-     */
+    //Kaprodi mengingatkan dosen pembimbing mahasiswa terkendala
     public function ingatkanDosen(\Illuminate\Http\Request $request, \App\Models\Skripsi $skripsi)
     {
         if (Auth::user()->role !== 'kaprodi') {

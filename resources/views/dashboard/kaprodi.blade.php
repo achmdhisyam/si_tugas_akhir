@@ -12,10 +12,9 @@
         </div>
     @endif
 
-    <!-- Grid Statistik Dinamis -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         
-        <!-- Kartu 1: Total Pengajuan -->
+        <!-- Total Pengajuan -->
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center">
             <div class="p-4 rounded-full bg-indigo-50 text-indigo-600 mr-4">
                 <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -28,7 +27,7 @@
             </div>
         </div>
 
-        <!-- Kartu 2: Perlu Divalidasi -->
+        <!-- Perlu Divalidasi -->
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center">
             <div class="p-4 rounded-full bg-amber-50 text-amber-600 mr-4">
                 <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -41,7 +40,7 @@
             </div>
         </div>
 
-        <!-- Kartu 3: Disetujui -->
+        <!--Disetujui -->
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center">
             <div class="p-4 rounded-full bg-emerald-50 text-emerald-600 mr-4">
                 <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -54,7 +53,7 @@
             </div>
         </div>
 
-        <!-- Kartu 4: Ditolak -->
+        <!-- Ditolak -->
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center">
             <div class="p-4 rounded-full bg-red-50 text-red-600 mr-4">
                 <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -68,10 +67,10 @@
         </div>
     </div>
 
-    <!-- Section: Analisis & Laporan -->
+    <!-- Analisis dan Laporan -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         
-        <!-- Kolom Kiri: Grafik Status Skripsi -->
+        <!-- Grafik Status Skripsi -->
         <div class="lg:col-span-1 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <h3 class="text-lg font-semibold text-gray-800 mb-4">Distribusi Status Skripsi</h3>
             <div class="relative h-64 w-full">
@@ -82,15 +81,15 @@
             </div>
         </div>
 
-        <!-- Kolom Kanan: Laporan Mahasiswa Macet -->
+        <!-- Laporan Mahasiswa Terkendala -->
         <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <div class="flex items-center justify-between mb-4">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-800">Laporan Mahasiswa Terkendala (Macet)</h3>
+                    <h3 class="text-lg font-semibold text-gray-800">Laporan Mahasiswa Terkendala</h3>
                     <p class="text-sm text-gray-500">Progress < 100% dan tidak bimbingan dalam > 30 hari terakhir.</p>
                 </div>
                 <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-bold">
-                    {{ count($mahasiswaMacet) }} Terdeteksi
+                   ada {{ count($mahasiswaMacet) }} mahasiswa terkendala 
                 </span>
             </div>
 
@@ -138,7 +137,6 @@
                     <svg class="mx-auto h-12 w-12 text-emerald-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    <h3 class="text-sm font-medium text-emerald-800">Semua Terkendali!</h3>
                     <p class="text-xs text-emerald-600">Tidak ada mahasiswa yang terdeteksi macet bimbingan.</p>
                 </div>
             @endif
@@ -159,9 +157,9 @@
                     datasets: [{
                         data: [data.sedang_skripsi, data.siap_sidang, data.lulus],
                         backgroundColor: [
-                            '#818cf8', // Indigo-400
-                            '#fbbf24', // Amber-400
-                            '#34d399'  // Emerald-400
+                            '#818cf8',
+                            '#fbbf24',
+                            '#34d399'  
                         ],
                         borderWidth: 0,
                         hoverOffset: 4

@@ -3,9 +3,8 @@
         Validasi Pengajuan Judul
     </x-slot>
 
-    <!-- Area Tabel Verifikasi -->
     <div id="antrean" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 scroll-mt-20">
-        <h2 class="text-lg font-semibold text-gray-800 mb-4">Antrean Pengajuan Judul (Perlu Validasi)</h2>
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">Antrian Pengajuan Judul (Perlu Validasi)</h2>
 
         @if($pengajuans->count() > 0)
             <div class="overflow-x-auto">
@@ -20,7 +19,7 @@
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         @foreach($pengajuans as $item)
-                        <!-- State Alpine x-data untuk toggle form validasi tiap baris -->
+
                         <tr class="hover:bg-gray-50 transition-colors" x-data="{ openForm: false, status: '' }">
                             <td class="py-4 px-4 text-sm text-gray-800 font-medium">
                                 {{ $item->mahasiswa->name }}
@@ -31,19 +30,17 @@
                             </td>
                             <td class="py-4 px-4 text-sm">
                                 @if($item->file_skripsi)
-                                    <!-- Pastikan symlink storage terhubung (php artisan storage:link) -->
                                     <a href="{{ Storage::url($item->file_skripsi) }}" target="_blank" class="text-indigo-600 hover:text-indigo-900 underline">Lihat File</a>
                                 @else
                                     <span class="text-gray-400 italic">Tidak ada file</span>
                                 @endif
                             </td>
                             <td class="py-4 px-4 text-sm align-top">
-                                <!-- Tombol Buka Form -->
+
                                 <button @click="openForm = !openForm" class="bg-indigo-50 text-indigo-700 hover:bg-indigo-100 px-3 py-1.5 rounded-md font-medium text-xs transition-colors shadow-sm">
                                     <span x-text="openForm ? 'Tutup Form' : 'Verifikasi'"></span>
                                 </button>
-                                
-                                <!-- Form Verifikasi Inline (Tampil saat diklik) -->
+
                                 <div x-show="openForm" x-transition class="mt-3 p-4 bg-gray-50 rounded-lg border border-gray-200" style="display: none;">
                                     <form action="{{ route('skripsi.validasi', $item->id) }}" method="POST" id="form-validasi-{{ $item->id }}" @submit.prevent="
                                         Swal.fire({
@@ -65,18 +62,18 @@
                                         <div class="mb-3">
                                             <label class="block text-xs font-medium text-gray-700 mb-1">Pilih Keputusan</label>
                                             <select name="status" x-model="status" required class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                                <option value="" disabled selected>-- Pilih --</option>
+                                                <option value="" disabled selected>Pilih</option>
                                                 <option value="disetujui">Setujui Judul</option>
                                                 <option value="ditolak">Tolak Judul</option>
                                             </select>
                                         </div>
 
-                                        <!-- Menampilkan Dropdown Dosen KHUSUS saat status = 'disetujui' -->
+                                        <!-- Dropdown Dosen KHUSUS saat status = disetujui -->
                                         <div x-show="status === 'disetujui'" x-transition class="mb-3 space-y-3" style="display: none;">
                                             <div>
                                                 <label class="block text-xs font-medium text-gray-700 mb-1">Dosen Pembimbing 1</label>
                                                 <select name="dosen_id" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" x-bind:required="status === 'disetujui'">
-                                                    <option value="">-- Pilih Pembimbing 1 --</option>
+                                                    <option value="">Pilih Pembimbing 1</option>
                                                     @foreach($dosens as $dosen)
                                                         <option value="{{ $dosen->id }}">{{ $dosen->name }}</option>
                                                     @endforeach
@@ -85,7 +82,7 @@
                                             <div>
                                                 <label class="block text-xs font-medium text-gray-700 mb-1">Dosen Pembimbing 2</label>
                                                 <select name="dosen_id_2" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" x-bind:required="status === 'disetujui'">
-                                                    <option value="">-- Pilih Pembimbing 2 --</option>
+                                                    <option value="">Pilih Pembimbing 2</option>
                                                     @foreach($dosens as $dosen)
                                                         <option value="{{ $dosen->id }}">{{ $dosen->name }}</option>
                                                     @endforeach
@@ -93,7 +90,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- Menampilkan Textarea KHUSUS saat status = 'ditolak' -->
+                                        <!-- KHUSUS saat status = ditolak -->
                                         <div x-show="status === 'ditolak'" x-transition class="mb-3" style="display: none;">
                                             <label class="block text-xs font-medium text-gray-700 mb-1">Alasan Penolakan</label>
                                             <textarea name="alasan_penolakan" rows="2" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Tuliskan alasan penolakan..." x-bind:required="status === 'ditolak'"></textarea>

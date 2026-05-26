@@ -33,7 +33,7 @@
         </div>
     </div>
 
-    <!-- Quick Action / Menu Pintasan -->
+    <!-- Quick Action -->
     <div class="bg-indigo-600 rounded-xl shadow-md text-white p-6 mb-8 flex flex-col md:flex-row items-center justify-between relative overflow-hidden">
         <div class="absolute right-0 top-0 opacity-10">
             <svg class="w-32 h-32 -mt-4 -mr-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2z"></path></svg>
@@ -41,7 +41,7 @@
         
         <div class="relative z-10 mb-4 md:mb-0">
             <h2 class="text-xl font-bold mb-2">Pantau Progress Anak Wali</h2>
-            <p class="text-indigo-100 text-sm max-w-lg">Lihat laporan bimbingan terbaru dari mahasiswa Anda, berikan reviu, dan pantau tingkat penyelesaian skripsi mereka secara real-time.</p>
+            <p class="text-indigo-100 text-sm max-w-lg">Lihat laporan bimbingan terbaru dari mahasiswa Anda, berikan review, dan pantau tingkat penyelesaian skripsi mereka.</p>
         </div>
         
         <div class="relative z-10">

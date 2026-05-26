@@ -19,7 +19,11 @@ return new class extends Migration
             $table->dateTime('tanggal');
             $table->enum('jenis', ['Proposal', 'Akhir']);
             $table->decimal('nilai', 5, 2)->nullable();
-            $table->foreignId('penguji_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('penguji_1_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('penguji_2_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->string('ruangan')->nullable();
+            $table->enum('status', ['menunggu_jadwal', 'dijadwalkan', 'selesai'])->default('menunggu_jadwal');
+            $table->enum('status_kelulusan', ['lulus', 'tidak_lulus', 'revisi'])->nullable();
             $table->timestamps();
         });
     }

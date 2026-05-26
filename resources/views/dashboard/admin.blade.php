@@ -3,7 +3,7 @@
         Dashboard Administrator
     </x-slot>
 
-    <!-- Panel Manajemen User -->
+    <!-- Manajemen User -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6" x-data="{ openCreateModal: false, openEditModal: false, editData: {} }">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
             <div>
@@ -81,12 +81,11 @@
             </table>
         </div>
         
-        <!-- Pagination -->
         <div class="mt-6">
             {{ $users->links() }}
         </div>
 
-        <!-- Create Modal -->
+        <!-- buat user -->
         <div x-show="openCreateModal" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;" aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                 <div x-show="openCreateModal" x-transition.opacity class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity backdrop-blur-sm" aria-hidden="true"></div>
@@ -134,7 +133,7 @@
             </div>
         </div>
 
-        <!-- Edit Modal -->
+        <!-- Edit -->
         <div x-show="openEditModal" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;" aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                 <div x-show="openEditModal" x-transition.opacity class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity backdrop-blur-sm" aria-hidden="true"></div>
@@ -184,7 +183,6 @@
         </div>
     </div>
 
-    <!-- Script for SweetAlert Delete Confirmation -->
     <script>
         function confirmDelete(userId) {
             Swal.fire({

@@ -6,8 +6,8 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <div class="flex justify-between items-center mb-6">
             <div>
-                <h2 class="text-lg font-semibold text-gray-800">Daftar Anak Wali</h2>
-                <p class="text-sm text-gray-500 mt-1">Daftar mahasiswa yang judul skripsinya telah disetujui dan berada di bawah bimbingan Anda.</p>
+                <h2 class="text-lg font-semibold text-gray-800">Daftar Mahasiswa Bimbingan</h2>
+                <p class="text-sm text-gray-500 mt-1">Daftar mahasiswa yang judul skripsinya telah disetujui dan berada di bawah bimbingan Anda</p>
             </div>
             <div class="px-4 py-2 bg-indigo-50 border border-indigo-100 rounded-lg">
                 <span class="text-sm font-medium text-indigo-800">Total: {{ $skripsis->count() }} Mahasiswa</span>
@@ -19,7 +19,7 @@
                 @foreach($skripsis as $skripsi)
                     <div class="border border-gray-200 rounded-xl hover:shadow-md transition-shadow bg-white flex flex-col h-full overflow-hidden relative">
                         
-                        <!-- Badge Notifikasi jika ada yang pending -->
+                        <!--Notifikasi mahasiswa terkendala -->
                         @if($skripsi->pending_count > 0)
                             <div class="absolute top-0 right-0 mt-3 mr-3 flex h-5 w-5 items-center justify-center">
                                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
@@ -58,9 +58,9 @@
                         <div class="px-5 py-3 border-t border-gray-100 bg-gray-50 flex items-center justify-between mt-auto">
                             <span class="text-xs text-gray-500 font-medium flex items-center">
                                 @if($skripsi->pending_count > 0)
-                                    <span class="text-amber-600 font-bold">{{ $skripsi->pending_count }} Reviu Tertunda</span>
+                                    <span class="text-amber-600 font-bold">{{ $skripsi->pending_count }} Review Tertunda</span>
                                 @else
-                                    <span class="text-gray-400">Semua tereviu</span>
+                                    <span class="text-gray-400">Semua sudah direview</span>
                                 @endif
                             </span>
                             

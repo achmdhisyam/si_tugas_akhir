@@ -5,7 +5,7 @@
 
     <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
         
-        <!-- Form Tambah Bimbingan (Kiri) -->
+        <!-- Form Tambah Bimbingan -->
         <div class="md:col-span-1">
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sticky top-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Form Progres Baru</h3>
@@ -70,7 +70,7 @@
             </div>
         </div>
 
-        <!-- Timeline Riwayat Bimbingan (Kanan) -->
+        <!-- Riwayat Bimbingan -->
         <div class="md:col-span-2">
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <div class="flex justify-between items-center mb-6">
@@ -100,14 +100,13 @@
                             @endphp
 
                             <div class="relative pl-8">
-                                <!-- Lingkaran Timeline -->
+ 
                                 <div class="absolute -left-3.5 top-1 h-7 w-7 rounded-full border-4 border-white bg-{{ $color }}-500 flex items-center justify-center text-white shadow-sm">
                                     <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         {!! $icon !!}
                                     </svg>
                                 </div>
 
-                                <!-- Konten Timeline -->
                                 <div class="bg-gray-50 rounded-lg p-4 border border-gray-100 hover:border-gray-200 transition-colors">
                                     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-2">
                                         <span class="text-xs font-medium text-gray-500 mb-1 sm:mb-0">

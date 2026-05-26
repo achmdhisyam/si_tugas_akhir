@@ -11,20 +11,15 @@ use Illuminate\Support\Facades\Storage;
 
 class BimbinganController extends Controller
 {
-    // ==========================================
     // BAGIAN MAHASISWA
-    // ==========================================
 
-    /**
-     * Tampilkan halaman logbook bimbingan mahasiswa.
-     */
+    // Tampilkan halaman logbook bimbingan mahasiswa.
     public function index()
     {
         $skripsi = Skripsi::with(['bimbingans' => function($q) {
             $q->orderBy('created_at', 'desc');
         }])->where('user_id', Auth::id())->latest()->first();
 
-        // Jika belum punya skripsi disetujui, tolak akses (opsional bisa di handle di middleware)
         if (!$skripsi || $skripsi->status !== 'disetujui') {
             return redirect()->route('dashboard')->with('error', 'Anda harus memiliki judul skripsi yang disetujui untuk mengakses logbook bimbingan.');
         }
@@ -32,9 +27,7 @@ class BimbinganController extends Controller
         return view('mahasiswa.bimbingan', compact('skripsi'));
     }
 
-    /**
-     * Simpan pengajuan progres bimbingan mahasiswa.
-     */
+    // Simpan pengajuan progres bimbingan mahasiswa  
     public function store(StoreBimbinganRequest $request)
     {
         $validated = $request->validated();
@@ -66,13 +59,9 @@ class BimbinganController extends Controller
         return back()->with('success', 'Catatan progres bimbingan berhasil dikirim. Menunggu reviu dosen.');
     }
 
-    // ==========================================
     // BAGIAN DOSEN
-    // ==========================================
 
-    /**
-     * Tampilkan daftar mahasiswa bimbingan (Anak Wali).
-     */
+    // Tampilkan daftar mahasiswa bimbingan  
     public function indexDosen()
     {
         $skripsis = Skripsi::with('mahasiswa')
@@ -89,9 +78,7 @@ class BimbinganController extends Controller
         return view('dosen.bimbingan.index', compact('skripsis'));
     }
 
-    /**
-     * Tampilkan timeline bimbingan spesifik satu mahasiswa.
-     */
+    //timeline bimbingan  satu mahasiswa.  
     public function showDosen(Skripsi $skripsi)
     {
         // Pastikan skripsi ini bimbingan milik dosen yang login
@@ -104,9 +91,7 @@ class BimbinganController extends Controller
         return view('dosen.bimbingan.show', compact('skripsi', 'bimbingans'));
     }
 
-    /**
-     * Dosen mereviu (menyetujui/merevisi) progres bimbingan.
-     */
+    //Dosen (menyetujui/merevisi) progres bimbingan  
     public function review(ReviewBimbinganRequest $request, Bimbingan $bimbingan)
     {
         // Pastikan dosen pembimbing yang login adalah pembimbing skripsi ini
@@ -124,7 +109,7 @@ class BimbinganController extends Controller
         // Auto-update Progress Bar di Skripsi jika disetujui
         if ($validated['status'] === 'disetujui') {
             $skripsi = $bimbingan->skripsi;
-            $newProgress = $skripsi->progress + 15; // Asumsi tambah 15% setiap ACC
+            $newProgress = $skripsi->progress + 15; 
             if ($newProgress > 100) $newProgress = 100;
             
             $skripsi->update(['progress' => $newProgress]);
@@ -136,9 +121,7 @@ class BimbinganController extends Controller
         return back()->with('success', 'Reviu bimbingan berhasil disimpan.');
     }
 
-    /**
-     * Dosen Pembimbing mengubah progress mahasiswa secara manual.
-     */
+    //Dosen Pembimbing mengubah progress mahasiswa secara manual.
     public function overrideProgress(\Illuminate\Http\Request $request, Skripsi $skripsi)
     {
         if ($skripsi->dosen_id !== Auth::id() && $skripsi->dosen_id_2 !== Auth::id()) {

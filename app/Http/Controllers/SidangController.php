@@ -64,7 +64,7 @@ class SidangController extends Controller
             'skripsi_id' => $skripsi->id,
             'jenis' => 'Akhir',
             'status' => 'menunggu_jadwal',
-            'tanggal' => now(), // Placeholder, akan diubah admin
+            'tanggal' => now(), 
         ]);
 
         // Notifikasi ke Admin
@@ -77,7 +77,7 @@ class SidangController extends Controller
     }
 
     /**
-     * Admin melihat antrean sidang.
+     * Admin melihat antrian sidang.
      */
     public function indexAdmin()
     {
@@ -105,7 +105,7 @@ class SidangController extends Controller
 
         $tanggal = \Carbon\Carbon::parse($request->tanggal);
 
-        // 1. Cek Bentrok Ruangan
+        // Cek Bentrok Ruangan
         $bentrokRuangan = JadwalSidang::where('tanggal', $tanggal)
             ->where('ruangan', $request->ruangan)
             ->where('id', '!=', $jadwal->id)
@@ -116,7 +116,7 @@ class SidangController extends Controller
             return back()->with('error', 'Gagal: Ruangan sudah terpakai pada tanggal dan jam tersebut.');
         }
 
-        // 2. Cek Bentrok Dosen
+        // Cek Bentrok Dosen
         $bentrokDosen = JadwalSidang::where('tanggal', $tanggal)
             ->where('id', '!=', $jadwal->id)
             ->where('status', 'dijadwalkan')

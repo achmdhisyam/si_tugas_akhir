@@ -40,7 +40,7 @@ class JadwalSidangDitetapkanNotification extends Notification
     public function toArray(object $notifiable): array
     {
         $role = $notifiable->role;
-        $url = '/dashboard'; // Default
+        $url = '/dashboard'; 
         
         if ($role === 'mahasiswa') {
             $url = '/mahasiswa/sidang';

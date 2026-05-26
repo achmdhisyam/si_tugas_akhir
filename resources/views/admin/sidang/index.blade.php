@@ -16,7 +16,7 @@
         @endif
 
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">Antrean Sidang Mahasiswa</h3>
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Antrian Sidang Mahasiswa</h3>
 
             @if($jadwalSidangs->count() > 0)
                 <div class="overflow-x-auto">
@@ -73,7 +73,7 @@
                                                 <div class="mb-3">
                                                     <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wide mb-1">Ruangan Sidang</label>
                                                     <select name="ruangan" required class="w-full text-xs border-gray-300 rounded shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                                        <option value="">-- Pilih Ruangan --</option>
+                                                        <option value="">Pilih Ruangan</option>
                                                         @foreach($ruangans as $ruang)
                                                             <option value="{{ $ruang->nama_ruangan }}" {{ $jadwal->ruangan == $ruang->nama_ruangan ? 'selected' : '' }}>
                                                                 {{ $ruang->nama_ruangan }} {{ $ruang->kapasitas ? '('.$ruang->kapasitas.' org)' : '' }}
@@ -85,7 +85,7 @@
                                                 <div class="mb-3">
                                                     <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wide mb-1">Dosen Penguji 1</label>
                                                     <select name="penguji_1_id" required class="w-full text-xs border-gray-300 rounded shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                                        <option value="">-- Pilih Penguji 1 --</option>
+                                                        <option value="">Pilih Penguji 1</option>
                                                         @foreach($dosens as $dosen)
                                                             <option value="{{ $dosen->id }}" {{ $jadwal->penguji_1_id == $dosen->id ? 'selected' : '' }}>{{ $dosen->name }}</option>
                                                         @endforeach
@@ -95,7 +95,7 @@
                                                 <div class="mb-4">
                                                     <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wide mb-1">Dosen Penguji 2</label>
                                                     <select name="penguji_2_id" required class="w-full text-xs border-gray-300 rounded shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                                        <option value="">-- Pilih Penguji 2 --</option>
+                                                        <option value="">Pilih Penguji 2</option>
                                                         @foreach($dosens as $dosen)
                                                             <option value="{{ $dosen->id }}" {{ $jadwal->penguji_2_id == $dosen->id ? 'selected' : '' }}>{{ $dosen->name }}</option>
                                                         @endforeach
@@ -134,7 +134,7 @@
                     <svg class="mx-auto h-12 w-12 text-gray-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                     </svg>
-                    <h4 class="text-gray-800 font-medium mb-1">Antrean Kosong</h4>
+                    <h4 class="text-gray-800 font-medium mb-1">Antrian Kosong</h4>
                     <p class="text-sm text-gray-500">Belum ada mahasiswa yang mendaftar sidang.</p>
                 </div>
             @endif

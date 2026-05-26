@@ -3,14 +3,13 @@
         Dashboard Mahasiswa
     </x-slot>
 
-    <!-- Layout Grid responsif untuk Kartu Informasi -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         
-        <!-- Kartu Ringkasan Status Skripsi -->
+        <!-- Ringkasan Status Skripsi -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between">
             <div>
                 <h2 class="text-lg font-semibold text-gray-800 mb-2">Status Pengajuan Skripsi</h2>
-                <p class="text-gray-500 text-sm">Menampilkan informasi terkini mengenai pengajuan skripsi Anda.</p>
+                <p class="text-gray-500 text-sm">Informasi terkini mengenai pengajuan skripsi Anda</p>
             </div>
             
             @if($skripsi)
@@ -60,17 +59,17 @@
             @else
                 <div class="mt-6 flex flex-col items-center justify-center p-6 bg-gray-50 rounded-lg border border-dashed border-gray-300">
                     <svg class="w-8 h-8 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    <p class="text-sm text-gray-500 text-center">Belum ada pengajuan judul.</p>
+                    <p class="text-sm text-gray-500 text-center">Belum ada pengajuan judul</p>
                     <a href="{{ route('skripsi.create') }}" class="mt-3 text-xs font-medium text-indigo-600 hover:text-indigo-800">Ajukan Sekarang &rarr;</a>
                 </div>
             @endif
         </div>
 
-        <!-- Kartu Progress Bar -->
+        <!-- Progress Bar -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between">
             <div>
                 <h2 class="text-lg font-semibold text-gray-800 mb-2">Progress Pengerjaan</h2>
-                <p class="text-gray-500 text-sm">Pantau sejauh mana penyelesaian skripsi Anda melalui bimbingan terakhir.</p>
+                <p class="text-gray-500 text-sm">Pantau sejauh mana penyelesaian skripsi Anda melalui bimbingan terakhir</p>
             </div>
             
             <div class="mt-6">

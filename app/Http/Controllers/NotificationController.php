@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
-    /**
-     * Tandai notifikasi sebagai sudah dibaca dan arahkan ke URL tujuannya.
-     */
+    // Tandai notifikasi sudah dibaca dan arahkan ke URL tujuannya.
     public function markAsRead($id)
     {
         $notification = Auth::user()->notifications()->findOrFail($id);

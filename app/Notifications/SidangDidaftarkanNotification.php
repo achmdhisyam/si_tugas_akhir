@@ -42,7 +42,7 @@ class SidangDidaftarkanNotification extends Notification
         return [
             'title' => 'Pendaftaran Sidang Baru',
             'message' => $this->jadwalSidang->skripsi->mahasiswa->name . ' telah mendaftar Sidang ' . $this->jadwalSidang->jenis . '. Segera jadwalkan.',
-            'url' => '/admin/sidang', // Kita asumsikan URL admin sidang ada di /admin/sidang
+            'url' => '/admin/sidang', 
         ];
     }
 }

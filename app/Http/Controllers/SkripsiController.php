@@ -34,7 +34,6 @@ class SkripsiController extends Controller
      */
     public function store(PengajuanSkripsiRequest $request)
     {
-        // Pastikan kembali belum ada yang aktif
         $skripsiAktif = Skripsi::where('user_id', Auth::id())
             ->whereIn('status', ['pending', 'disetujui'])
             ->first();
@@ -78,7 +77,7 @@ class SkripsiController extends Controller
     }
 
     /**
-     * Kaprodi memvalidasi (menyetujui/menolak) pengajuan judul.
+     * Kaprodi (menyetujui/menolak) pengajuan judul.
      */
     public function validasi(ValidasiSkripsiRequest $request, Skripsi $skripsi)
     {
@@ -89,15 +88,15 @@ class SkripsiController extends Controller
                 'status' => 'disetujui',
                 'dosen_id' => $validatedData['dosen_id'],
                 'dosen_id_2' => $validatedData['dosen_id_2'],
-                'alasan_penolakan' => null, // Reset alasan penolakan jika sebelumnya ditolak
+                'alasan_penolakan' => null,
             ]);
             $message = 'Judul skripsi berhasil disetujui dan pembimbing telah ditetapkan.';
         } else {
             $skripsi->update([
                 'status' => 'ditolak',
                 'alasan_penolakan' => $validatedData['alasan_penolakan'],
-                'dosen_id' => null, // Hapus dosen jika ditolak
-                'dosen_id_2' => null, // Hapus dosen 2 jika ditolak
+                'dosen_id' => null, 
+                'dosen_id_2' => null, 
             ]);
             $message = 'Judul skripsi telah ditolak.';
         }

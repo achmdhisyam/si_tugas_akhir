@@ -53,7 +53,7 @@ class BimbinganDireviewNotification extends Notification
         return [
             'type' => 'bimbingan_direview',
             'bimbingan_id' => $this->bimbingan->id,
-            'title' => 'Reviu Logbook Bimbingan',
+            'title' => 'Review Logbook Bimbingan',
             'message' => 'Dosen pembimbing telah memberikan reviu dan feedback pada bimbingan Anda.',
             'url' => route('bimbingan.index'),
         ];

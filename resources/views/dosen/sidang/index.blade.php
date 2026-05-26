@@ -123,7 +123,7 @@
                                             </form>
                                         @else
                                             <div class="p-2 bg-emerald-100 border border-emerald-200 text-emerald-800 rounded text-xs font-bold text-center">
-                                                Anda telah menyetujui revisi ini.
+                                                Anda telah menyetujui revisi ini
                                             </div>
                                         @endif
                                     </div>
@@ -134,7 +134,7 @@
                                     <span x-text="openForm ? 'Tutup Form Nilai' : 'Input Nilai & Keputusan'"></span>
                                 </button>
 
-                                <!-- Form Input Nilai -->
+                                <!-- Form Nilai -->
                                 <div x-show="openForm" x-transition class="mt-4 p-4 bg-white border border-indigo-200 rounded-lg shadow-sm" style="display: none;">
                                     <form id="formNilai-{{ $jadwal->id }}" action="{{ route('dosen.sidang.nilai', $jadwal->id) }}" method="POST">
                                         @csrf

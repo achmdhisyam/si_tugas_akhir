@@ -35,7 +35,7 @@
                     </div>
                 </div>
 
-                <!-- Form Override Progress -->
+                <!-- update Progress manual-->
                 <div class="border-t border-gray-100 pt-5 mt-5">
                     <p class="text-xs font-semibold text-indigo-800 uppercase tracking-wider mb-3">Update Progress Manual</p>
                     <form action="{{ route('dosen.bimbingan.override', $skripsi->id) }}" method="POST" class="flex gap-2" id="override-form">
@@ -68,7 +68,7 @@
         <!-- Daftar Timeline Logbook -->
         <div class="lg:col-span-2">
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-6">Timeline Progres & Reviu</h3>
+                <h3 class="text-lg font-semibold text-gray-800 mb-6">Timeline Progres & Review</h3>
 
                 @if($bimbingans->count() > 0)
                     <div class="space-y-6">
@@ -85,7 +85,7 @@
                                     <div>
                                         @if($bimbingan->status === 'pending')
                                             <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800 border border-amber-200">
-                                                Menunggu Reviu
+                                                Menunggu Review
                                             </span>
                                         @elseif($bimbingan->status === 'disetujui')
                                             <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 border border-emerald-200">
@@ -99,7 +99,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Body Isi Laporan Mahasiswa -->
+                                <!-- Isi Laporan Mahasiswa -->
                                 <div class="p-4">
                                     <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Laporan Mahasiswa:</p>
                                     <p class="text-sm text-gray-800 mb-3">{{ $bimbingan->catatan }}</p>
@@ -114,15 +114,12 @@
                                     @endif
                                 </div>
 
-                                <!-- Footer / Action Area -->
                                 <div class="px-4 py-3 bg-gray-50 border-t border-gray-200">
                                     @if($bimbingan->status === 'pending')
-                                        <!-- Tombol untuk membuka form reviu -->
                                         <button @click="openReview = !openReview" class="inline-flex items-center px-4 py-1.5 bg-indigo-600 text-white text-xs font-medium rounded hover:bg-indigo-700 transition-colors shadow-sm">
                                             <span x-text="openReview ? 'Batal Reviu' : 'Berikan Reviu & Feedback'"></span>
                                         </button>
 
-                                        <!-- Form Reviu -->
                                         <div x-show="openReview" x-transition class="mt-4 p-4 bg-white border border-indigo-100 rounded-lg shadow-sm" style="display: none;">
                                             <form action="{{ route('dosen.bimbingan.review', $bimbingan->id) }}" method="POST" id="form-review-{{ $bimbingan->id }}" @submit.prevent="
                                                 Swal.fire({
@@ -144,8 +141,8 @@
                                                 <div class="mb-3">
                                                     <label class="block text-xs font-medium text-gray-700 mb-1">Keputusan / Status Progres</label>
                                                     <select name="status" x-model="status" required class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                                        <option value="" disabled selected>-- Pilih --</option>
-                                                        <option value="disetujui">ACC / Disetujui (Lanjut Bab Berikutnya)</option>
+                                                        <option value="" disabled selected> Pilih </option>
+                                                        <option value="disetujui">ACC / Disetujui (Lanjut Berikutnya)</option>
                                                         <option value="direvisi">Ada Revisi (Perbaiki Dahulu)</option>
                                                     </select>
                                                 </div>
@@ -159,7 +156,6 @@
                                             </form>
                                         </div>
                                     @else
-                                        <!-- Jika sudah direview, tampilkan hasil reviewnya -->
                                         <div>
                                             <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Feedback Anda:</p>
                                             <div class="bg-white p-3 rounded border border-gray-200">
@@ -177,7 +173,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                         </svg>
                         <h4 class="text-gray-800 font-medium mb-1">Belum Ada Progres</h4>
-                        <p class="text-sm text-gray-500">Mahasiswa ini belum mengirimkan catatan bimbingan apapun.</p>
+                        <p class="text-sm text-gray-500">Mahasiswa ini belum mengirimkan catatan bimbingan apapun</p>
                     </div>
                 @endif
             </div>
