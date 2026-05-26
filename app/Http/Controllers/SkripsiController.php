@@ -65,13 +65,15 @@ class SkripsiController extends Controller
         return redirect()->route('dashboard')->with('success', 'Pengajuan judul skripsi berhasil dikirim dan menunggu validasi.');
     }
 
-    /**
-     * Menampilkan halaman daftar validasi untuk Kaprodi.
-     */
     public function indexKaprodi()
     {
         $pengajuans = Skripsi::with('mahasiswa')->where('status', 'pending')->get();
-        $dosens = User::where('role', 'dosen')->get();
+        $dosens = User::where('role', 'dosen')
+            ->withCount(['skripsiBimbingans as bimbingan_aktif_count' => function ($query) {
+                $query->where('status', 'disetujui')
+                      ->where('progress', '<', 100);
+            }])
+            ->get();
         
         return view('kaprodi.validasi', compact('pengajuans', 'dosens'));
     }

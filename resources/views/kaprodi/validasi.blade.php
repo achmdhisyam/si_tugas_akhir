@@ -75,7 +75,7 @@
                                                 <select name="dosen_id" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" x-bind:required="status === 'disetujui'">
                                                     <option value="">Pilih Pembimbing 1</option>
                                                     @foreach($dosens as $dosen)
-                                                        <option value="{{ $dosen->id }}">{{ $dosen->name }}</option>
+                                                        <option value="{{ $dosen->id }}">{{ $dosen->name }} (Aktif: {{ $dosen->bimbingan_aktif_count ?? 0 }} Mhs)</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -84,7 +84,7 @@
                                                 <select name="dosen_id_2" class="w-full text-sm border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" x-bind:required="status === 'disetujui'">
                                                     <option value="">Pilih Pembimbing 2</option>
                                                     @foreach($dosens as $dosen)
-                                                        <option value="{{ $dosen->id }}">{{ $dosen->name }}</option>
+                                                        <option value="{{ $dosen->id }}">{{ $dosen->name }} (Aktif: {{ $dosen->bimbingan_aktif_count ?? 0 }} Mhs)</option>
                                                     @endforeach
                                                 </select>
                                             </div>
