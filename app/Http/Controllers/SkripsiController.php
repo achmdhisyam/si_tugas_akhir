@@ -69,7 +69,7 @@ class SkripsiController extends Controller
     {
         $pengajuans = Skripsi::with('mahasiswa')->where('status', 'pending')->get();
         $dosens = User::where('role', 'dosen')
-            ->withCount(['skripsiBimbingans as bimbingan_aktif_count' => function ($query) {
+            ->withCount(['bimbinganSkripsi as bimbingan_aktif_count' => function ($query) {
                 $query->where('status', 'disetujui')
                       ->where('progress', '<', 100);
             }])
